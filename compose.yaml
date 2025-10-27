@@ -1,0 +1,21 @@
+
+
+
+services:
+
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "edam15!k2Mp_"
+      MYSQL_DATABASE: "newdb"
+      MYSQL_USER: "appuser"
+      MYSQL_PASSWORD: "edam15!k2Mp_"
+    volumes:
+      - db_api:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db_api:
+    driver: local
