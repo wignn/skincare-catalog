@@ -12,8 +12,8 @@ class AuthController extends Controller
     public function login(Request $request){
 
         $request->validate([
-            'email' => 'required|varchar|exists:users,email|max:50',
-            'password' => 'required|varchar|min:8|max:50',
+            'email' => 'required|string|exists:users,email|max:50',
+            'password' => 'required|string|min:8|max:50',
         ]);
         if(Auth::attempt($request->only('email', 'password'), $request->remember)){
             return redirect('/dashboard');
