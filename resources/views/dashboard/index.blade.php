@@ -17,7 +17,7 @@
                 <div class="p-4">
                     <h2 class="text-lg font-semibold">{{ $product->name }}</h2>
                     <p class="text-gray-600 text-sm">{{ $product->description }}</p>
-                    <p class="mt-2 font-semibold">${{ number_format($product->price, 2) }}</p>
+                    <p class="mt-2 font-semibold">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
                     <div class="flex justify-between gap-2 mt-3">
                         <a href="{{ route('products.edit', $product->id) }}"
                             class="w-1/2 text-center border border-gray-400 text-gray-700 py-2 rounded hover:bg-gray-100">
