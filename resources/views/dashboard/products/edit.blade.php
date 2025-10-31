@@ -41,7 +41,7 @@
 
         <div class="mb-4">
             <label class="block font-semibold mb-1">Image</label>
-            <input type="file" name="image" class="w-full hover:bg-gray-100">
+            <input type="file" name="image" accept="image/*" class="w-full hover:bg-gray-100">
             @if ($product->image)
                 <img src="{{ asset('storage/' . $product->image) }}" alt="" class="w-32 mt-2 rounded">
             @endif
