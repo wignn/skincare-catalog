@@ -16,7 +16,8 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|max:50',
         ]);
         if(Auth::attempt($request->only('email', 'password'), $request->remember)){
-            return redirect('/dashboard');
+            if(Auth::user()->role == 'customer')
+                return redirect('/view/id_product');
         }
 
         return back()->with('failed', 'Email atau kata sandi salah.');
@@ -36,6 +37,11 @@ class AuthController extends Controller
         return redirect('/dashboard');
     }
 
+    public function logout(){
+        Auth::logout(Auth::user());
+        return redirect('/login');
+    }
+
     public function google_redirect(){
         return Socialite::driver('google')->redirect();
     }
@@ -47,10 +53,11 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $googleuser->name,
                 'email' => $googleuser->email,
+                'role'     => 'customer',
             ]);
         }
         Auth::login($user);
-        if($user->role == 'customer')return redirect('/dashboard');
-        return redirect('/admin/dashboard');
+        if($user->role == 'admin')return redirect('/dashboard');
+        return redirect('/view/id_product');
     }
 }
