@@ -1,7 +1,5 @@
-# Gunakan PHP 8.2 FPM
 FROM php:8.2-fpm
 
-# Install dependencies sistem
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -14,22 +12,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install ekstensi PHP yang diperlukan
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Tambahkan Composer dari image resmi
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Set working directory
 WORKDIR /var/www/html
 
-COPY ./skincare-catalog/app /var/www/html
+COPY ./skincare-catalog/ /var/www/html/
 
-# Jalankan composer install jika ada composer.json
-RUN if [ -f "composer.json" ]; then \
-    composer install --no-dev --optimize-autoloader --no-interaction; \
-    fi
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Set permission dan buat folder storage
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && mkdir -p /var/www/html/storage/logs \
@@ -37,8 +31,6 @@ RUN chown -R www-data:www-data /var/www/html \
     && chown -R www-data:www-data /var/www/html/storage \
     && chmod -R 775 /var/www/html/storage
 
-# Buka port 9000 untuk PHP-FPM
 EXPOSE 9000
 
-# Jalankan PHP-FPM
 CMD ["php-fpm"]
