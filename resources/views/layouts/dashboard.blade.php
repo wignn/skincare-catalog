@@ -16,8 +16,8 @@
             <li><a href="#" class="hover:text-gray-600">About</a></li>
         </ul>
         <div>
-            <a href="#" class="border px-4 py-2 hover:bg-gray-100">Logout</a>
-        </div>  
+            <a href="/logout" class="border px-4 py-2 hover:bg-gray-100">Logout</a>
+        </div>
     </nav>
 
 
