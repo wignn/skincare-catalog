@@ -17,8 +17,11 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && mkdir -p storage/logs storage/cache \
-    && chown -R www-data:www-data storage \
-    && chmod -R 775 storage
+    && chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Configure PHP-FPM to listen on 0.0.0.0:9000
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 9000
 
