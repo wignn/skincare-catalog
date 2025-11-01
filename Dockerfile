@@ -20,11 +20,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 # Tambahkan Composer dari image resmi
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Tentukan working directory di dalam container
 WORKDIR /var/www/html
 
-# 📦 Copy source code aplikasi dari folder skincare-catalog/app ke container
-# (karena Dockerfile ada di skincare-catalog, tapi context build ada di root)
 COPY ./skincare-catalog/app /var/www/html
 
 # Jalankan composer install jika ada composer.json
