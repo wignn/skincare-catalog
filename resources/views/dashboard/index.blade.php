@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@extends('layouts.add-product')
 
 @section('content')
     <h1 class="text-2xl font-semibold mb-6">Featured Products</h1>
@@ -37,3 +38,5 @@
         @endforeach
     </div>
 @endsection
+
+
