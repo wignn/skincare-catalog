@@ -11,3 +11,6 @@ run-php:
 
 run-vite:
 	npm run dev
+
+mysql-console:
+	sudo docker exec -it skincare-catalog-db-1 bash
