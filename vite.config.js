@@ -10,4 +10,21 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    server: {
+        host: '0.0.0.0',
+        port: 5173,
+        hmr: {
+            host: 'localhost',
+        },
+    },
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        rollupOptions: {
+            input: {
+                app: 'resources/js/app.js',
+                css: 'resources/css/app.css',
+            },
+        },
+    },
 });

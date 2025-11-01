@@ -1,3 +1,15 @@
+FROM node:20 AS node-builder
+
+WORKDIR /app
+
+COPY ./skincare-catalog/package*.json ./
+
+RUN npm install
+
+COPY ./skincare-catalog/ ./
+
+RUN npm run build
+
 FROM php:8.2-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -12,6 +24,8 @@ WORKDIR /var/www/html
 
 COPY ./skincare-catalog/ /var/www/html/
 
+COPY --from=node-builder /app/public/build /var/www/html/public/build
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN chown -R www-data:www-data /var/www/html \
@@ -20,7 +34,6 @@ RUN chown -R www-data:www-data /var/www/html \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Configure PHP-FPM to listen on 0.0.0.0:9000
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 9000
