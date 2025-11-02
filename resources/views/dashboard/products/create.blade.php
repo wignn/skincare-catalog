@@ -4,7 +4,7 @@
 <h1 class="text-2xl font-semibold mb-6 p-4">Add Product</h1>
 
 @if ($errors->any())
-    <div>
+      <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-700">
         <ul>
             @foreach ($errors->all() as $error)
                 <li>- {{ $error }}</li>
@@ -13,7 +13,7 @@
     </div>
 @endif
 
-<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4 p-4">
+<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4 p-4 justify-center center">
     @csrf   
     <div>
         <label>Product Name</label>

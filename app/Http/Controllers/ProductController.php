@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -13,8 +13,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('created_at', 'desc')->get();
-        // $products = Product::all();
+        $products = Cache::remember('product:list', now()->addMinutes(5), function () {
+            return Product::orderBy('created_at', 'desc')->get();
+        });
+
         return view('dashboard.index', compact('products'));
     }
 
@@ -23,8 +25,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-    //    $products = Product::all();
-       return view('dashboard.products.create'); 
+        //    $products = Product::all();
+        return view('dashboard.products.create');
     }
 
     /**
@@ -33,11 +35,11 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validated  = $request->validate([
-            'name'=>'required|string|max:255',
-            'description'=>'nullable|string',
-            'price'=>'required|numeric|min:0',
-            'stock'=>'required|integer|min:0',
-            'image'=>'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
@@ -46,6 +48,7 @@ class ProductController extends Controller
         }
 
         Product::create($validated);
+        Cache::forget('product:list');
         return redirect()->route('dashboard.index')->with('success', 'Product created successfully!');
     }
 
@@ -54,7 +57,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Cache::remember('product:' . $id, now()->addMinutes(5), function () use ($id) {
+            return Product::findOrFail($id);
+        });
     }
 
     /**
@@ -70,7 +75,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id)
-    {  
+    {
         $product = Product::findOrFail($id);
 
         $validated = $request->validate([
@@ -86,6 +91,8 @@ class ProductController extends Controller
         }
 
         $product->update($validated);
+        Cache::forget('product:list');
+        Cache::forget('product:' . $id);
 
         return redirect()->route('dashboard.index')->with('success', 'Product updated successfully!');
     }
@@ -98,6 +105,8 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $product->delete();
+        Cache::forget('product:list');
+        Cache::forget('product:' . $id);
         return redirect()->back()->with('success', 'Product deleted successfully!');
     }
 }
