@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <h1 class="text-2xl font-semibold mb-6">Edit Product</h1>
+    <h1 class="text-2xl font-semibold mb-6 p-4">Edit Product</h1>
     @if ($errors->any())
         <div class="mb-4 p-4 bg-red-50 border border-red-200 text-red-700">
             <ul class="list-disc list-inside">
@@ -12,7 +12,7 @@
         </div>
     @endif
 
-    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="max-w-lg">
+    <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4 p-4 justify-center center">
         @csrf
         @method('PUT')
 
