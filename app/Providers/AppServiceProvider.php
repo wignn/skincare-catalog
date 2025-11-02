@@ -26,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Configure S3 for Cloudflare R2 with SSL verification disabled
-        Storage::extend('r2', function ($app, $config) {
+        Storage::extend('r2', function ($app, $config): FilesystemAdapter {
             $client = new S3Client([
                 'credentials' => [
                     'key' => $config['key'],
