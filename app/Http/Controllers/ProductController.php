@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -39,11 +40,11 @@ class ProductController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
+            $path = $request->file('image')->store('products', 's3');
             $validated['image'] = $path;
         }
 
@@ -83,11 +84,15 @@ class ProductController extends Controller
             'description' => 'nullable',
             'price' => 'required|numeric',
             'stock' => 'required|integer|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('products', 'public');
+            if ($product->image) {
+                Storage::disk('s3')->delete($product->image);
+            }
+            
+            $validated['image'] = $request->file('image')->store('products', 's3');
         }
 
         $product->update($validated);
@@ -104,6 +109,11 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);
+        
+        if ($product->image) {
+            Storage::disk('s3')->delete($product->image);
+        }
+        
         $product->delete();
         Cache::forget('product:list');
         Cache::forget('product:' . $id);

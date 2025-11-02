@@ -1,37 +1,43 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-use phpseclib3\File\ASN1\Maps\AdministrationDomainName;
+use Illuminate\Support\Facades\Route;
 
+// Public Routes
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::resource('products', ProductController::class);
-// Route::get('/products', [ProductController::class, 'index'])->name('dashboard-index');
-// Route::get('/create-product', [ProductController::class, 'create'])->name('products.create');
-// Route::post('/create-product', [ProductController::class, 'store'])->name('products.store');
-Route::resource('products', ProductController::class);
-// Route::put('/edit-product/{id}', [ProductController::class, 'update'])->name('products.edit');
-// Route::delete('/delete-product/{id}', [ProductController::class, 'destroy'])->name('products.delete');
+// Authentication Routes
 
-//middleware
-Route::group(['middleware' => ['auth', 'check_role:admin']], function () {
-    Route::get('/dashboard', [ProductController::class, 'index'])->name('dashboard.index');
-});
-
-// login register
+// Login
 Route::get('/login', fn() => view('auth.login'))->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
+// Register
 Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+// Logout
 Route::get('/logout', [AuthController::class, 'logout']);
 
-// google auth
+// Google OAuth
 Route::get('/auth-google-redirect', [AuthController::class, 'google_redirect']);
 Route::get('/auth-google-callback', [AuthController::class, 'google_callback']);
 
+
+// Protected Routes (Authenticated)
+Route::middleware(['auth', 'check_role:admin'])->group(function () {
+    Route::get('/dashboard', [ProductController::class, 'index'])->name('dashboard.index');
+});
+
+// Product Routes
+
+// Route::get('/products', [ProductController::class, 'index'])->name('dashboard-index');
+// Route::get('/create-product', [ProductController::class, 'create'])->name('products.create');
+// Route::post('/create-product', [ProductController::class, 'store'])->name('products.store');
+// Route::put('/edit-product/{id}', [ProductController::class, 'update'])->name('products.edit');
+// Route::delete('/delete-product/{id}', [ProductController::class, 'destroy'])->name('products.delete');
+
+Route::resource('products', ProductController::class);
