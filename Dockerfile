@@ -3,11 +3,9 @@ FROM node:20 AS node-builder
 WORKDIR /app
 
 COPY ./skincare-catalog/package*.json ./
-
 RUN npm install
 
 COPY ./skincare-catalog/ ./
-
 RUN npm run build
 
 FROM php:8.2-fpm
@@ -17,6 +15,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+
+RUN pecl install redis && docker-php-ext-enable redis
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
