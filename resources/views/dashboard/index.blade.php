@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@extends('layouts.add-product')
 
 @section('content')
     <div class="p-4 sm:p-6">
