@@ -145,7 +145,7 @@
             </div>
 
             <div class="mt-3">
-                <a href="/auth/google/redirect" class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2" style="background-color: #fff; color: #000; border-radius: 10px;">
+                <a href="/auth-google-redirect" class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2" style="background-color: #fff; color: #000; border-radius: 10px;">
                     <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
                     <span>Masuk dengan Google</span>
                 </a>
