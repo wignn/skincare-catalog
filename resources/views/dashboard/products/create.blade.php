@@ -13,7 +13,7 @@
     </div>
 @endif
 
-<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4 p-4">
+<form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4 p-4 justify-center center">
     @csrf   
     <div>
         <label>Product Name</label>
