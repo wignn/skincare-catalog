@@ -44,6 +44,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
+            // Upload ke Cloudflare R2
             $path = $request->file('image')->store('products', 's3');
             $validated['image'] = $path;
         }
@@ -88,6 +89,7 @@ class ProductController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
+            // Delete old image dari R2 jika ada
             if ($product->image) {
                 Storage::disk('s3')->delete($product->image);
             }
@@ -110,6 +112,7 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         
+        // Delete image dari R2 jika ada
         if ($product->image) {
             Storage::disk('s3')->delete($product->image);
         }
