@@ -20,7 +20,7 @@ Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
 // Logout
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Google OAuth
 Route::get('/auth-google-redirect', [AuthController::class, 'google_redirect']);
