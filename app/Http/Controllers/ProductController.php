@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -14,10 +13,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Cache::remember('product:list', now()->addMinutes(5), function () {
-            return Product::orderBy('created_at', 'desc')->get();
-        });
-
+        $products = Product::orderBy('created_at', 'desc')->get();
         return view('dashboard.index', compact('products'));
     }
 
@@ -50,7 +46,6 @@ class ProductController extends Controller
         }
 
         Product::create($validated);
-        Cache::forget('product:list');
         return redirect()->route('dashboard.index')->with('success', 'Product created successfully!');
     }
 
@@ -59,9 +54,7 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $product = Cache::remember('product:' . $id, now()->addMinutes(5), function () use ($id) {
-            return Product::findOrFail($id);
-        });
+   
     }
 
     /**
@@ -93,13 +86,11 @@ class ProductController extends Controller
             if ($product->image) {
                 Storage::disk('s3')->delete($product->image);
             }
-            
+
             $validated['image'] = $request->file('image')->store('products', 's3');
         }
 
         $product->update($validated);
-        Cache::forget('product:list');
-        Cache::forget('product:' . $id);
 
         return redirect()->route('dashboard.index')->with('success', 'Product updated successfully!');
     }
@@ -111,15 +102,13 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);
-        
+
         // Delete image dari R2 jika ada
         if ($product->image) {
             Storage::disk('s3')->delete($product->image);
         }
-        
+
         $product->delete();
-        Cache::forget('product:list');
-        Cache::forget('product:' . $id);
         return redirect()->back()->with('success', 'Product deleted successfully!');
     }
 }
