@@ -1,171 +1,84 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loginl</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <script src="https://kit.fontawesome.com/28c480c2cf.js" crossorigin="anonymous"></script>
-
-    <style>
-        body {
-            background-color: #f9f6f1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .login-box {
-            background-color: #111;
-            color: #fff;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-            width: 380px;
-        }
-
-        .login-box h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-
-        .separator {
-            height: 1px;
-            background-color: #fff;
-            opacity: 0.5;
-            margin: 1rem 0 2rem;
-        }
-
-        .form-control {
-            background-color: #e8f0ff;
-            border: none;
-            border-radius: 8px;
-        }
-
-        .form-control:focus {
-            background-color: #dbe5ff;
-            box-shadow: none;
-        }
-
-        .btn-login {
-            background-color: #f9f6f1;
-            color: #111;
-            font-weight: 600;
-            border: none;
-            width: 100%;
-            border-radius: 8px;
-            padding: 0.75rem;
-            transition: 0.3s;
-        }
-
-        .btn-login:hover {
-            background-color: #e8e4da;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        .footer a {
-            color: #f9f6f1;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .input-group-text {
-            background-color: #e8f0ff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .input-group-text:hover {
-            background-color: #dbe5ff;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Mirglow</title>
+  <script src="https://kit.fontawesome.com/28c480c2cf.js" crossorigin="anonymous"></script>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body>
-    <div class="login-box">
-        <h2>Login</h2>
-        <div class="separator"></div>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen ">
 
-        @if(session('failed'))
-            <div class="alert alert-danger">
-                {{ session('failed') }}
-            </div>
-        @endif
+  <div class="bg-white shadow-lg rounded-2xl w-full max-w-sm p-8">
+    <h2 class="text-2xl font-semibold text-center text-gray-800 mb-1">Masuk ke Mirglow</h2>
+    <p class="text-sm text-gray-500 text-center mb-6">Gunakan akun Anda untuk melanjutkan</p>
 
-        <form method="POST" action="/login">
-            @csrf
-            @error('email')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+    @if(session('failed'))
+      <div class="bg-red-100 text-red-700 text-sm p-2 rounded mb-3">{{ session('failed') }}</div>
+    @endif
 
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input id="email" type="email" name="email" class="form-control" placeholder="Masukkan email" required autofocus>
-            </div>
+    <form method="POST" action="/login">
+      @csrf
 
-            @error('password')
-                <div class="alert alert-danger">{{ $message }}</div>
-            @enderror
+      <div class="mb-4">
+        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input id="email" type="email" name="email" placeholder="Masukkan email" value="{{ old('email') }}"
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        @error('email')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
+      <div class="mb-4">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Kata Sandi</label>
+        <div class="relative">
+          <input id="password" type="password" name="password" placeholder="Masukkan kata sandi"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10">
+          <span id="togglePassword" class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500">
+            <i class="fa-solid fa-eye"></i>
+          </span>
+        </div>
+        @error('password')
+          <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+        @enderror
+      </div>
 
-            <div class="mb-3">
-                <label for="password" class="form-label">Kata Sandi</label>
-                <div class="input-group">
-                    <input id="password" type="password" name="password" class="form-control" placeholder="Masukkan kata sandi" required>
-                    <span class="input-group-text" id="togglePassword">
-                        <i class="fa-solid fa-eye"></i>
-                    </span>
-                </div>
-            </div>
+      <div class="flex items-center justify-between mb-4">
+        <label class="flex items-center gap-2 text-sm text-gray-700">
+          <input type="checkbox" name="remember" class="rounded border-gray-300">
+          Ingat saya
+        </label>
+      </div>
 
-            <div class="form-check text-start mb-3">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember">
-                <label class="form-check-label" for="remember">
-                    Ingat saya
-                 </label>
-            </div>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">
+        Masuk
+      </button>
 
-            <button type="submit" class="btn btn-login">Masuk</button>
+      <div class="text-center text-sm mt-4 text-gray-600">
+        Belum punya akun?
+        <a href="/register" class="text-blue-600 hover:underline font-medium">Daftar</a>
+      </div>
 
-            <div class="footer">
-                Belum punya akun? <a href="/register">Daftar</a>
-            </div>
+      <div class="mt-4">
+        <a href="/auth-google-redirect"
+           class="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 text-gray-700 hover:bg-gray-100 transition">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="18">
+          <span>Masuk dengan Google</span>
+        </a>
+      </div>
+    </form>
+  </div>
 
-            <div class="mt-3">
-                <a href="/auth-google-redirect" class="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2" style="background-color: #fff; color: #000; border-radius: 10px;">
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" width="20">
-                    <span>Masuk dengan Google</span>
-                </a>
-            </div>
+  <script>
+    const togglePassword = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+    togglePassword.addEventListener('click', function () {
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+      this.querySelector('i').classList.toggle('fa-eye');
+      this.querySelector('i').classList.toggle('fa-eye-slash');
+    });
+  </script>
 
-        </form>
-    </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        const togglePassword = document.getElementById('togglePassword');
-        const password = document.getElementById('password');
-        togglePassword.addEventListener('click', function () {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            this.querySelector('i').classList.toggle('fa-eye');
-            this.querySelector('i').classList.toggle('fa-eye-slash');
-        });
-    </script>
 </body>
 </html>

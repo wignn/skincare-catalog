@@ -12,16 +12,23 @@ class AuthController extends Controller
     public function login(Request $request){
 
         $request->validate([
-            'email' => 'required|string|exists:users,email|max:50',
+            'email' => 'required|string|email|max:50',
             'password' => 'required|string|min:8|max:50',
         ]);
-        if(Auth::attempt($request->only('email', 'password'), $request->remember)){
-            if(Auth::user()->role == 'customer')
-                return redirect('/view/id_product');
-        }
 
-        return back()->with('failed', 'Email atau kata sandi salah.');
+        if(Auth::attempt($request->only('email', 'password'), $request->filled('remember'))){
+
+            $request->session()->regenerate();
+
+            if(Auth::user()->role == 'customer') {
+                return redirect('/view/id_product');
+            }
+            return redirect('/dashboard');
+        }
+        return back()->withErrors(['failed' => 'Email atau kata sandi salah.'])->withInput();
     }
+
+
 
     public function register(Request $request){
         $request->validate([
@@ -31,14 +38,23 @@ class AuthController extends Controller
             'confirm_password' => 'required|same:password',
         ]);
 
-        $user = User::create($request->all());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => 'customer',
+            'password' => bcrypt($request->password),
+        ]);
 
         Auth::login($user);
-        return redirect('/dashboard');
+        $request->session()->regenerate();
+        return redirect('/view/id_product');
     }
 
-    public function logout(){
-        Auth::logout(Auth::user());
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect('/login');
     }
 
@@ -46,7 +62,7 @@ class AuthController extends Controller
         return Socialite::driver('google')->redirect();
     }
 
-    public function google_callback(){
+    public function google_callback(Request $request){
         $googleuser = Socialite::driver('google')->user();
         $user = User::whereEmail($googleuser->email)->first();
         if(!$user){
@@ -57,6 +73,7 @@ class AuthController extends Controller
             ]);
         }
         Auth::login($user);
+        $request->session()->regenerate();
         if($user->role == 'admin')return redirect('/dashboard');
         return redirect('/view/id_product');
     }
