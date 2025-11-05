@@ -2,12 +2,19 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\MetricsController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Monitoring & Health Check Routes
+Route::get('/metrics', [MetricsController::class, 'metrics'])->name('metrics');
+Route::get('/health', [MetricsController::class, 'health'])->name('health');
+Route::get('/ready', [MetricsController::class, 'ready'])->name('ready');
+Route::get('/alive', [MetricsController::class, 'alive'])->name('alive');
 
 // Authentication Routes
 
