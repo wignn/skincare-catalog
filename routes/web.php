@@ -40,7 +40,6 @@ Route::middleware(['auth', 'check_role:admin'])->group(function () {
 });
 
 // Product Routes
-
 // Route::get('/products', [ProductController::class, 'index'])->name('dashboard-index');
 // Route::get('/create-product', [ProductController::class, 'create'])->name('products.create');
 // Route::post('/create-product', [ProductController::class, 'store'])->name('products.store');
