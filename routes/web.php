@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 
 // Monitoring & Health Check Routes
-Route::get('/metrics', [MetricsController::class, 'metrics'])->name('metrics');
+Route::get('/metrics', [MetricsController::class, 'metrics'])->name('metrics')->withoutMiddleware('web');
 Route::get('/health', [MetricsController::class, 'health'])->name('health');
 Route::get('/ready', [MetricsController::class, 'ready'])->name('ready');
 Route::get('/alive', [MetricsController::class, 'alive'])->name('alive');
