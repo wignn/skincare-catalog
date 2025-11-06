@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\Cache;
 
 class MetricsController extends Controller
 {
+    private static $startTime = null;
+
+    public function __construct()
+    {
+        if (self::$startTime === null) {
+            self::$startTime = time();
+        }
+    }
+
     public function metrics()
     {
         $host = env('REDIS_HOST', '127.0.0.1');
@@ -27,18 +36,9 @@ class MetricsController extends Controller
         }
 
         $adapter = new Redis($redisConfig);
-
         $registry = new CollectorRegistry($adapter);
 
-        $counter = $registry->getOrRegisterCounter(
-            'app',
-            'http_requests_total',
-            'Total number of HTTP requests',
-            ['method', 'route']
-        );
-
-        $counter->incBy(1, [request()->method(), request()->path()]);
-
+        // Just render existing metrics from registry (populated by middleware)
         $renderer = new RenderTextFormat();
         return response($renderer->render($registry->getMetricFamilySamples()))
             ->header('Content-Type', RenderTextFormat::MIME_TYPE);

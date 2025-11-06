@@ -11,7 +11,7 @@ Route::get('/', function () {
 });
 
 // Monitoring & Health Check Routes
-Route::get('/metrics', [MetricsController::class, 'metrics'])->name('metrics');
+Route::get('/metrics', [MetricsController::class, 'metrics'])->name('metrics')->withoutMiddleware('web');
 Route::get('/health', [MetricsController::class, 'health'])->name('health');
 Route::get('/ready', [MetricsController::class, 'ready'])->name('ready');
 Route::get('/alive', [MetricsController::class, 'alive'])->name('alive');
@@ -27,7 +27,7 @@ Route::get('/register', fn() => view('auth.register'))->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
 // Logout
-Route::get('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Google OAuth
 Route::get('/auth-google-redirect', [AuthController::class, 'google_redirect']);
