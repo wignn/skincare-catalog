@@ -13,26 +13,23 @@ class MetricsController extends Controller
 {
     public function metrics()
     {
-        // Ambil REDIS_URL dari .env
-        $redisUrl = env('REDIS_URL', 'redis://127.0.0.1:6379');
+        $host = env('REDIS_HOST', '127.0.0.1');
+        $port = env('REDIS_PORT', 6379);
+        $password = env('REDIS_PASSWORD');
 
-        // Parse URL redis://user:pass@host:port
-        $parts = parse_url($redisUrl);
-
-        $host = $parts['host'] ?? '127.0.0.1';
-        $port = $parts['port'] ?? 6379;
-        $password = $parts['pass'] ?? null;
-
-        // Konfigurasi Redis adapter Prometheus
-        $adapter = new Redis([
+        $redisConfig = [
             'host' => $host,
-            'port' => $port,
-            'password' => $password,
-        ]);
+            'port' => (int) $port,
+        ];
+
+        if ($password && $password !== 'null') {
+            $redisConfig['password'] = $password;
+        }
+
+        $adapter = new Redis($redisConfig);
 
         $registry = new CollectorRegistry($adapter);
 
-        // Metric: HTTP request counter
         $counter = $registry->getOrRegisterCounter(
             'app',
             'http_requests_total',
@@ -42,7 +39,6 @@ class MetricsController extends Controller
 
         $counter->incBy(1, [request()->method(), request()->path()]);
 
-        // Render output Prometheus
         $renderer = new RenderTextFormat();
         return response($renderer->render($registry->getMetricFamilySamples()))
             ->header('Content-Type', RenderTextFormat::MIME_TYPE);
