@@ -11,6 +11,12 @@ class AuthController extends Controller
 {
     public function login(Request $request){
 
+        if (Auth::check()) {
+            return Auth::user()->role == 'customer'
+            ? redirect('/customer')
+            : redirect('/dashboard');
+        }
+
         $request->validate([
             'email' => 'required|string|email|max:50',
             'password' => 'required|string|min:8|max:50',
@@ -20,10 +26,9 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            if(Auth::user()->role == 'customer') {
-                return redirect('/view/id_product');
-            }
-            return redirect('/admin');
+            return Auth::user()->role == 'customer'
+            ? redirect('/customer')
+            : redirect('/dashboard');
         }
         return back()->withErrors(['failed' => 'Email atau kata sandi salah.'])->withInput();
     }
@@ -56,6 +61,16 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/login');
+    }
+
+    public function showLoginForm()
+    {
+        if (Auth::check()) {
+            return Auth::user()->role === 'admin'
+                ? redirect('/dashboard')
+                : redirect('/customer');
+        }
+        return view('auth.login');
     }
 
     public function google_redirect(){
