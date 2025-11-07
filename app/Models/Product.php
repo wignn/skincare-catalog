@@ -41,4 +41,9 @@ class Product extends Model
      * Append accessor to array/JSON
      */
     protected $appends = ['image_url'];
+
+    public function orderItems()
+    {
+        return $this->hasMany(\App\Models\OrderItem::class, 'product_id');
+    }
 }
