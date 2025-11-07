@@ -7,7 +7,7 @@ docker-run-prod:
 
 
 run-php:
-	php artisan serve
+	composer run dev
 
 run-vite:
 	npm run dev
