@@ -23,7 +23,7 @@ class AuthController extends Controller
             if(Auth::user()->role == 'customer') {
                 return redirect('/view/id_product');
             }
-            return redirect('/dashboard');
+            return redirect('/admin');
         }
         return back()->withErrors(['failed' => 'Email atau kata sandi salah.'])->withInput();
     }
@@ -74,7 +74,7 @@ class AuthController extends Controller
         }
         Auth::login($user);
         $request->session()->regenerate();
-        if($user->role == 'admin')return redirect('/dashboard');
+        if($user->role == 'admin')return redirect('/admin');
         return redirect('/view/id_product');
     }
 }
