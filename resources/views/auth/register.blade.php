@@ -43,9 +43,9 @@
                 <div class="bg-red-100 text-red-700 p-2 rounded text-sm">{{ $message }}</div>
             @enderror
             <div>
-                <label for="password" class="block text-gray-700 font-medium mb-1">Kata Sandi</label>
+                <label for="password" class="block text-gray-700 font-medium mb-1">Password</label>
                 <div class="relative">
-                    <input id="password" type="password" name="password" placeholder="Masukkan kata sandi"
+                    <input id="password" type="password" name="password" placeholder="Masukkan Password"
                     class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none pr-10"  required>
 
                     <span id="togglePassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
@@ -58,9 +58,9 @@
                 <div class="bg-red-100 text-red-700 p-2 rounded text-sm">{{ $message }}</div>
             @enderror
             <div>
-                <label for="confirm_password" class="block text-gray-700 font-medium mb-1">Konfirmasi Kata Sandi</label>
+                <label for="confirm_password" class="block text-gray-700 font-medium mb-1">Konfirmasi Password</label>
                 <div class="relative">
-                    <input id="confirm_password" type="password" name="confirm_password" placeholder="Konfirmasi kata sandi"
+                    <input id="confirm_password" type="password" name="confirm_password" placeholder="Konfirmasi Password"
                     class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none pr-10"  required>
                     <span id="toggleConfirmPassword" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer">
                         <i class="fa-solid fa-eye"></i>

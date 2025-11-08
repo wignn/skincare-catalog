@@ -30,9 +30,9 @@
       </div>
 
       <div class="mb-4">
-        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Kata Sandi</label>
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
         <div class="relative">
-          <input id="password" type="password" name="password" placeholder="Masukkan kata sandi"
+          <input id="password" type="password" name="password" placeholder="Masukkan Password"
             class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none pr-10">
           <span id="togglePassword" class="absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500">
             <i class="fa-solid fa-eye"></i>
@@ -48,6 +48,7 @@
           <input type="checkbox" name="remember" class="rounded border-gray-300">
           Ingat saya
         </label>
+        <a href="/forgot-password" class="text-sm text-blue-600 hover:underline">Lupa Password?</a>
       </div>
 
       <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">
