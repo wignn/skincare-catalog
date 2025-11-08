@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect('/view/id_product');
+        return redirect('/customer');
     }
 
     public function logout(Request $request){
@@ -90,6 +90,6 @@ class AuthController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
         if($user->role == 'admin')return redirect('/admin');
-        return redirect('/view/id_product');
+        return redirect('/customer');
     }
 }
