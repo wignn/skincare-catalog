@@ -22,7 +22,13 @@ WORKDIR /var/www/html
 COPY ./skincare-catalog/ ./
 COPY --from=node-builder /app/public/build public/build
 
-COPY .env.example .env
+RUN if [ ! -f .env ]; then \
+    if [ -f .env.example ]; then \
+        cp .env.example .env; \
+    else \
+        touch .env; \
+    fi; \
+fi
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
