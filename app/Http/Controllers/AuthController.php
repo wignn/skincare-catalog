@@ -14,7 +14,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return Auth::user()->role == 'customer'
             ? redirect('/customer')
-            : redirect('/dashboard');
+            : redirect('/admin');
         }
 
         $request->validate([
@@ -28,7 +28,7 @@ class AuthController extends Controller
 
             return Auth::user()->role == 'customer'
             ? redirect('/customer')
-            : redirect('/dashboard');
+            : redirect('/admin');
         }
         return back()->withErrors(['failed' => 'Email atau kata sandi salah.'])->withInput();
     }
@@ -65,7 +65,7 @@ class AuthController extends Controller
     {
         if (Auth::check()) {
             return Auth::user()->role === 'admin'
-                ? redirect('/dashboard')
+                ? redirect('/admin')
                 : redirect('/customer');
         }
         return view('auth.login');
