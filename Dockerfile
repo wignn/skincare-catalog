@@ -1,18 +1,14 @@
 FROM node:20 AS node-builder
-
 WORKDIR /app
-
 COPY ./skincare-catalog/package*.json ./
 RUN npm install
-
 COPY ./skincare-catalog/ ./
 RUN npm run build
 
 FROM php:8.3-fpm
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev \
-    libicu-dev \
+    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev libicu-dev \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure intl \
@@ -23,20 +19,17 @@ RUN pecl install redis && docker-php-ext-enable redis
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+COPY ./skincare-catalog/ ./
+COPY --from=node-builder /app/public/build public/build
 
-COPY ./skincare-catalog/ /var/www/html/
+COPY .env.example .env
 
-COPY --from=node-builder /app/public/build /var/www/html/public/build
+RUN composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-RUN mkdir -p /var/www/html/public/css/filament \
-    && mkdir -p /var/www/html/public/js/filament \
-    && mkdir -p /var/www/html/public/fonts/filament
-
+RUN mkdir -p public/css/filament public/js/filament public/fonts/filament
 RUN php artisan filament:assets || echo "Filament assets command failed, but continuing..."
 
-RUN cp -r /var/www/html/public /var/www/html-public-backup
+RUN cp -r public /var/www/html-public-backup
 
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
@@ -56,5 +49,4 @@ fi\n\
 exec php-fpm\n' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
 
 EXPOSE 9000
-
 CMD ["/usr/local/bin/start.sh"]
