@@ -9,9 +9,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('customer.home');
 
 // Monitoring & Health Check Routes
 Route::controller(MetricsController::class)->group(function () {
