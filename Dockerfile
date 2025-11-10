@@ -30,6 +30,14 @@ COPY --from=node-builder /app/public/build /var/www/html/public/build
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+RUN mkdir -p /var/www/html/public/css/filament \
+    && mkdir -p /var/www/html/public/js/filament \
+    && mkdir -p /var/www/html/public/fonts/filament
+
+RUN php artisan filament:assets || echo "Filament assets command failed, but continuing..."
+
+RUN cp -r /var/www/html/public /var/www/html-public-backup
+
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && mkdir -p storage/logs storage/cache \
@@ -38,6 +46,15 @@ RUN chown -R www-data:www-data /var/www/html \
 
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:9000/' /usr/local/etc/php-fpm.d/www.conf
 
+RUN printf '#!/bin/sh\n\
+set -e\n\
+if [ ! -f /var/www/html/public/index.php ]; then\n\
+  echo "Populating public directory from backup..."\n\
+  cp -r /var/www/html-public-backup/* /var/www/html/public/\n\
+  chown -R www-data:www-data /var/www/html/public\n\
+fi\n\
+exec php-fpm\n' > /usr/local/bin/start.sh && chmod +x /usr/local/bin/start.sh
+
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["/usr/local/bin/start.sh"]
