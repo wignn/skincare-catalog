@@ -40,5 +40,11 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => config('app.url') . '/auth-google-callback',
     ],
+    'whatsapp' => [
+        'url' => env('WHATSAPP_API_URL'),
+        'token' => env('WHATSAPP_API_TOKEN'),
+        'admin_number' => env('WHATSAPP_ADMIN_NUMBER'),
+    ],
+
 
 ];
