@@ -13,8 +13,8 @@ class AuthController extends Controller
 
         if (Auth::check()) {
             return Auth::user()->role == 'customer'
-            ? redirect('/customer')
-            : redirect('/admin');
+            ? redirect()->intended('/customer')
+            : redirect()->intended('/admin');
         }
 
         $request->validate([
@@ -27,8 +27,8 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             return Auth::user()->role == 'customer'
-            ? redirect('/customer')
-            : redirect('/admin');
+            ? redirect()->intended('/customer')
+            : redirect()->intended('/admin');
         }
         return back()->withErrors(['failed' => 'Email atau kata sandi salah.'])->withInput();
     }
@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         Auth::login($user);
         $request->session()->regenerate();
-        return redirect('/customer');
+        return redirect()->intended('/customer');
     }
 
     public function logout(Request $request){
@@ -87,7 +87,7 @@ class AuthController extends Controller
         }
         Auth::login($user);
         $request->session()->regenerate();
-        if($user->role == 'admin')return redirect('/admin');
-        return redirect('/customer');
+        if($user->role == 'admin')return redirect()->intended('/admin');
+        return redirect()->intended('/customer');
     }
 }
