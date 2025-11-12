@@ -76,5 +76,5 @@ Route::middleware('auth')->prefix('order')->controller(OrderController::class)->
     Route::post('/order/from-cart', [OrderController::class, 'storeFromCart'])
         ->name('orders.store-from-cart');
 
-
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
 });

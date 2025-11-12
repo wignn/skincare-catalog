@@ -60,7 +60,7 @@
         </div>
 
         <div class="flex gap-3">
-            <a href="#" 
+            <a href="{{ route('orders.index') }}" 
                class="flex-1 px-6 py-3 bg-gray-200 text-gray-700 rounded-lg text-center hover:bg-gray-300">
                 Lihat Semua Pesanan
             </a>
