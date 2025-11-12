@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -78,3 +79,15 @@ Route::middleware('auth')->prefix('order')->controller(OrderController::class)->
 
     Route::get('/', [OrderController::class, 'index'])->name('orders.index');
 });
+
+// Cart Routes
+Route::middleware('auth')->prefix('cart')->controller(CartController::class)->group(function () {
+    Route::get('/', 'index')->name('cart.index');
+    Route::post('/add/{product}', 'add')->name('cart.add');
+    Route::post('update/{cartItem}', 'update')->name('cart.update');
+    Route::delete('remove/{cartItem}', 'remove')->name('cart.remove');
+    // Route::delete('clear', 'clear')->name('cart.clear');
+});
+
+
+// Route::get('/cart', [CartController::class,   'index'])->name('cart.index');
