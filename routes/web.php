@@ -6,6 +6,7 @@ use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MetricsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -50,22 +51,30 @@ Route::get('/auth-google-callback', [AuthController::class, 'google_callback']);
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Protected Routes (Authenticated)
+// Protected Routes (Authenticated - Admin)
 Route::middleware(['auth', 'check_role:admin'])->group(function () {
     Route::get('/dashboard', [ProductController::class, 'index'])->name('dashboard.index');
     Route::resource('products', ProductController::class);
 });
 
-// Product Routes
-// Route::get('/products', [ProductController::class, 'index'])->name('dashboard-index');
-// Route::get('/create-product', [ProductController::class, 'create'])->name('products.create');
-// Route::post('/create-product', [ProductController::class, 'store'])->name('products.store');
-// Route::put('/edit-product/{id}', [ProductController::class, 'update'])->name('products.edit');
-// Route::delete('/delete-product/{id}', [ProductController::class, 'destroy'])->name('products.delete');
-
-Route::prefix('customer')->controller(HomeController::class)->group(function () {
-    Route::get('/', 'index')->name('customer.home');
-    Route::get('/products', 'products')->name('customer.products');
+// Protected Routes (Authenticated - Customer)
+Route::middleware(['auth', 'check_role:customer'])->group(function () {
+    Route::prefix('customer')->controller(HomeController::class)->group(function () {
+        Route::get('/', 'index')->name('customer.home');
+        Route::get('/products', 'products')->name('customer.products');
+    });
 });
 
+// Order Routes
+Route::middleware('auth')->prefix('order')->controller(OrderController::class)->group(function () {
+    Route::get('/direct/{product}', 'createDirect')->name('orders.create-direct');
+    Route::post('/direct/{product}', 'storeDirect')->name('orders.store-direct');
+    Route::get('/{order}', 'show')->name('orders.show');
 
+    Route::get('/order/from-cart', [OrderController::class, 'createFromCart'])
+        ->name('orders.create-from-cart');
+    Route::post('/order/from-cart', [OrderController::class, 'storeFromCart'])
+        ->name('orders.store-from-cart');
+
+
+});
