@@ -12,20 +12,22 @@
     <div class="mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
 
       @foreach ($products as $product)
-      <div class="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
-        <div class="relative w-full h-52 bg-gray-100 overflow-hidden">
-          <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}"
-               alt="{{ $product->name }}"
-               class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-        </div>
+        <a href="{{ route('customer.product.detail', $product->id) }}">
+            <div class="group bg-white/90 backdrop-blur border border-gray-100 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
+                <div class="relative w-full h-52 bg-gray-100 overflow-hidden">
+                <img src="{{ asset($product->image_url) }}" alt="{{ $product->name }}"
+                    alt="{{ $product->name }}"
+                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                </div>
 
-        <div class="p-4">
-          <h3 class="text-gray-800 font-semibold text-sm line-clamp-2">{{ $product->name }}</h3>
-          <p class="text-blue-600 font-bold text-base mt-3">
-            Rp{{ number_format($product->price, 0, ',', '.') }}
-          </p>
-        </div>
-      </div>
+                <div class="p-4">
+                <h3 class="text-gray-800 font-semibold text-sm line-clamp-2">{{ $product->name }}</h3>
+                <p class="text-blue-600 font-bold text-base mt-3">
+                    Rp{{ number_format($product->price, 0, ',', '.') }}
+                </p>
+                </div>
+            </div>
+        </a>
       @endforeach
 
     </div>
