@@ -62,7 +62,7 @@
             {{-- Dropdown --}}
             <div id="user-menu"
               class="hidden absolute top-12 right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg">
-              <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+              <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
               <form action="{{ route('logout') }}" method="POST" class="block">
                 @csrf
                 <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">

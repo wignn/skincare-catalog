@@ -91,3 +91,8 @@ Route::middleware('auth')->prefix('cart')->controller(CartController::class)->gr
 
 
 // Route::get('/cart', [CartController::class,   'index'])->name('cart.index');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
