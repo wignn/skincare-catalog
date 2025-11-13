@@ -6,7 +6,7 @@
     <title>@yield('title', 'Exclusive')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
   </head>
-
+  @livewireStyles
   <body class="font-sans bg-white text-gray-800">
     {{-- navbar --}}
     <nav class="border-b border-gray-100 bg-white">
@@ -80,5 +80,6 @@
         });
       }
     </script>
+    @livewireScripts
   </body>
 </html>
