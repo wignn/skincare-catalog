@@ -17,7 +17,8 @@
       <p class="text-gray-600 mt-4">{{ $product->description ?? 'Deskripsi belum tersedia.' }}</p>
 
       <div class="mt-6">
-        <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Tambah ke Keranjang</a>
+        {{-- <a href="#" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">Tambah ke Keranjang</a> --}}
+        @livewire('add-to-cart-button', ['product' => $product], key($product->id))
       </div>
     </div>
   </div>
