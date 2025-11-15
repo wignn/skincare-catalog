@@ -41,7 +41,7 @@ class AddToCartButton extends Component
 
         $this->dispatch('cartUpdated');
         // session()->flash('success', "{$this->product->name} added to cart!");
-        $this->dispatch('toast', message:'Produk berhasil ditambahkan ke keranjang!');
+        $this->dispatch('toast', message:'✅ Produk berhasil ditambahkan ke keranjang');
     }
     public function render()
     {
