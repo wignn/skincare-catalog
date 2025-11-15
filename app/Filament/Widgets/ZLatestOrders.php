@@ -41,7 +41,8 @@ class ZLatestOrders extends TableWidget
                 ->color(fn (string $state): string => match ($state) {
                     'proses' => 'warning',
                     'dikirim' => 'info',
-                    'selesai' => 'success'
+                    'selesai' => 'success',
+                    default => 'gray'
                 }),
             ])
             ->filters([
