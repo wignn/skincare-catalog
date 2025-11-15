@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 use App\Models\Product;
+use App\Models\Banner;
 
 class HomeController extends Controller
 {
     public function index()
     {
+        $banners = Banner::where('is_active', true)
+            ->orderBy('order', 'asc')
+            ->get();
+
         $featuredProducts = Product::withSum('orderItems', 'quantity')
             ->orderByDesc('order_items_sum_quantity')
             ->limit(4)
@@ -16,7 +21,11 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
             
-        return view('customer.index', compact('featuredProducts', 'products'));
+        return view('customer.index',[
+            'banners' => $banners,
+            'featuredProducts' => $featuredProducts,
+            'products' => $products
+        ]);
     }
 
     public function products()

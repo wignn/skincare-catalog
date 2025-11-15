@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>@yield('title', 'Exclusive')</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
+  @livewireStyles
 </head>
-@livewireStyles
 
 <body class="font-sans bg-white text-gray-800">
   {{-- navbar --}}
@@ -99,7 +99,35 @@
         userMenu.classList.toggle('hidden');
       });
     }
+
+    document.addEventListener('livewire:initialized', () => {
+      Livewire.on('toast', ({ message }) => {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.className = 'fixed bottom-5 right-5 bg-[#9ece7c] text-black px-4 py-4 rounded-lg shadow-lg animate-fade-in';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+      });
+    }); 
   </script>
+
+  <style>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.2s ease-out;
+    }
+  </style>
   @livewireScripts
 </body>
 
