@@ -39,9 +39,10 @@ class ZLatestOrders extends TableWidget
                 ->label('Status')
                 ->badge()
                 ->color(fn (string $state): string => match ($state) {
-                    'Proses' => 'warning',
-                    'Dikirim' => 'info',
-                    'Selesai' => 'success'
+                    'proses' => 'warning',
+                    'dikirim' => 'info',
+                    'selesai' => 'success',
+                    default => 'gray'
                 }),
             ])
             ->filters([
